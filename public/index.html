@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Scraper</title>
+</head>
+<body>
+    <h1>DataScraper</h1>
+    <form id="search-form">
+        <input type="text" id="keywords" placeholder="Enter keywords..." required>
+        <select id="country">
+            <option value="Slovenia">Slovenia</option>
+            <option value="Austria">Austria</option>
+            <option value="Germany">Germany</option>
+            <option value="UK">UK</option>
+            <option value="Czech">Czech</option>
+            <option value="Italy">Italy</option>
+        </select>
+        <button type="submit">Scrape</button>
+    </form>
+
+    <h2>Data scraped:</h2>
+    <ul id="results"></ul>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const keywords = document.getElementById('keywords').value;
+            const country = document.getElementById('country').value;
+
+            const response = await fetch('http://localhost:3000/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keywords, country })
+            });
+
+            const results = await response.json();
+            const resultsList = document.getElementById('results');
+            resultsList.innerHTML = '';
+
+            results.forEach(result => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${result.url}" target="_blank">${result.title}</a>`;
+                resultsList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
