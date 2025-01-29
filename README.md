@@ -1,6 +1,6 @@
 # DataScraper
 
-A web application for extracting contact information from keyword targeted websites.
+A web application for extracting contact information from a list of websited based on keywords and country.
 
 ## Contents
 
