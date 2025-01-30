@@ -1,8 +1,3 @@
-/**
- * Express router for scraping contact information from provided URLs.
- *
- * @module routes/scrape
- */
 import express from "express";
 import puppeteer from "puppeteer";
 import extractData from "../utils/parser.mjs";
@@ -12,16 +7,12 @@ const router = express.Router();
 /**
  * POST /scrape
  *
- * Scrapes contact information (emails and phone numbers) from an array of URLs.
+ * Scrapes contact information from an array of URLs.
  *
- * @name POST/scrape
- * @function
- * @memberof module:routes/scrape
- * @param {Object} req - Express request object.
- * @param {Object} req.body - Request body.
- * @param {string[]} req.body.urls - Array of URLs to scrape.
- * @param {Object} res - Express response object.
- * @returns {Object} JSON response containing the scraped data or an error message.
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body
+ * @param {Array} req.body.urls - Array of URLs to scrape
+ * @param {Object} res - Express response object
  */
 router.post("/", async (req, res) => {
   const { urls } = req.body;
@@ -34,20 +25,27 @@ router.post("/", async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
     const results = [];
 
-    for (const url of urls) {
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+    for (const { url, title } of urls) {
+      if (!url || !url.startsWith("http")) {
+        console.error(`Invalid URL: ${url}`);
+        results.push({ name: title || "N/A", url, emails: [], phones: [] });
+        continue;
+      }
       let emails = [];
       let phones = [];
       try {
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        console.log(`Navigating to: ${url}`);
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
         const content = await page.content();
         ({ emails, phones } = extractData(content));
-        results.push({ url, emails, phones });
+
+        results.push({ name: title || "N/A", url, emails, phones });
       } catch (error) {
         console.error(`Error scraping ${url}:`, error);
-        results.push({ url, emails, phones });
+        results.push({ name: title || "N/A", url, emails, phones });
       }
     }
 
