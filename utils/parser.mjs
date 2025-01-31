@@ -1,3 +1,5 @@
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+
 /**
  * Extracts email addresses and phone numbers from the given content.
  *
@@ -9,27 +11,58 @@
 export default function extractData(content) {
   const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
   let emails = content.match(emailRegex) || [];
-  emails = emails.filter(
-    (email) => !/\.(png|jpg|jpeg|gif|bmp|tiff|webp|webpack)$/i.test(email)
-  );
-  emails = [...new Set(emails)];
-  emails = emails.slice(0, 4);
-  const phoneRegex =
-    /(\+?\d{1,3}[\s-]?)?(\(?\d{2,4}\)?[\s-]?)?(\d{3,4}[\s-]?\d{3,4})/g;
-  let phones = content.match(phoneRegex) || [];
-  phones = phones.filter((phone) => {
-    phone = phone.replace(/\D/g, "");
+
+  const blacklistedDomains = [
+    'myemail.com',
+    'email.com',
+    'example.com',
+    'domain.com',
+    'test.com',
+    'mail.com',
+    'user.com',
+    'temp.com',
+    'fake.com',
+    'placeholder.com'
+  ];
+
+  emails = emails.filter((email) => {
+    const domain = email.split('@')[1].toLowerCase();
     return (
-      phone.length >= 8 &&
-      phone.length <= 15 &&
-      !/^0+$/.test(phone) &&
-      !/^1+$/.test(phone) &&
-      !/^2+$/.test(phone) &&
-      !/^(\d)\1{5,}$/.test(phone)
+      !blacklistedDomains.includes(domain) &&
+      !/\.(png|jpg|jpeg|gif|bmp|tiff|webp|webpack)$/i.test(email)
     );
   });
-  phones = [...new Set(phones)];
-  phones.sort((a, b) => (a.startsWith("+") ? -1 : 1));
-  phones = phones.slice(0, 4);
-  return { emails, phones };
+
+  emails = [...new Set(emails)];
+  emails = emails.slice(0, 4);
+
+  const phoneRegex = /(?:(?:\+|00)\d{1,3}[-.\s]?)?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g;
+  let phones = content.match(phoneRegex) || [];
+
+  phones = phones
+    .map((phone) => {
+      const phoneNumber = parsePhoneNumberFromString(phone);
+      if (phoneNumber && phoneNumber.isValid()) {
+        return phoneNumber.formatInternational();
+      }
+      return null;
+    })
+    .filter((phone) => phone !== null);
+
+  const uniquePhones = [];
+  const seenPhones = new Set();
+
+  for (const phone of phones) {
+    const normalizedPhone = phone.replace(/\D/g, '');
+
+    if (!seenPhones.has(normalizedPhone)) {
+      seenPhones.add(normalizedPhone);
+      uniquePhones.push(phone);
+    }
+  }
+
+  uniquePhones.sort((a, b) => (a.startsWith("+") ? -1 : 1));
+  const finalPhones = uniquePhones.slice(0, 4);
+
+  return { emails, phones: finalPhones };
 }
