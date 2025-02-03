@@ -18,41 +18,39 @@
         <option value="Slovenia">Slovenia</option>
         <option value="Austria">Austria</option>
         <option value="Germany">Germany</option>
-        <option value="UK">UK</option>
-        <option value="Czech">Czech</option>
+        <option value="United Kingdom">UK</option>
+        <option value="Czechia">Czech</option>
         <option value="Italy">Italy</option>
       </select>
       <button type="submit">Scrape</button>
       <button type="button" onclick="openFilters()">Advanced Filters</button>
-
-      <div
-        id="filter-popup"
-        style="display: none; position: fixed; background: white; padding: 20px; border: 1px solid black;"
-      >
-        <h3>Exclude Websites</h3>
-        <label><input type="checkbox" class="filter-checkbox" value="youtube.com"> YouTube</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="reddit.com"> Reddit</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="quora.com"> Quora</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="tripadvisor.com"> TripAdvisor</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="forbes.com"> Forbes</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="linkedin.com"> Linkedin</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="facebook.com"> Facebook</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="tiktok.com"> Tiktok</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="wikipedia.com"> Wikipedia</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="x.com"> Twitter/X</label><br>
-        <label><input type="checkbox" class="filter-checkbox" value="instagram.com"> Instagram</label><br>
-        <br>
-        <label>Add more:</label>
-        <label><input type="text" class="" value=""></label>
-        <br><br>
-        <button type="button" onclick="applyFilters()">Apply</button>
-        <button type="button" onclick="closeFilters()">Close</button>
-      </div>
+      <button type="button" onclick="downloadCSV()">Download CSV</button>
     </form>
-    <br>
+
+    <div
+      id="filter-popup"
+      style="
+        display: none;
+        background: white;
+        padding: 20px;
+        border: 1px solid black;
+      "
+    >
+      <h3>Exclude Websites</h3>
+      <input
+        type="text"
+        id="exclude-websites"
+        placeholder="Enter websites to exclude..."
+      />
+      <button type="button" onclick="applyFilters()">Apply</button>
+      <button type="button" onclick="openFilters()">Close</button>
+    </div>
+
+    <br />
     <div id="pagination"></div>
     <h2>Data scraped:</h2>
     <ul id="results"></ul>
+
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,23 +1,14 @@
 let currentPage = 1;
 const resultsPerPage = 10;
-let userBlacklist = [];
+let allResults = [];
+let totalPages = 1;
 
 /**
- * Opens the advanced filters popup.
+ * Opens or closes the advanced filters popup.
  */
 function openFilters() {
-  if (document.getElementById("filter-popup").style.display == "block") {
-    document.getElementById("filter-popup").style.display = "none";
-  } else {
-    document.getElementById("filter-popup").style.display = "block";
-  }
-}
-
-/**
- * Closes the advanced filters popup.
- */
-function closeFilters() {
-  document.getElementById("filter-popup").style.display = "none";
+  const popup = document.getElementById("filter-popup");
+  popup.style.display = popup.style.display === "block" ? "none" : "block";
 }
 
 /**
@@ -28,8 +19,7 @@ function applyFilters() {
     document.querySelectorAll(".filter-checkbox:checked")
   ).map((checkbox) => checkbox.value);
 
-  console.log("Applied Blacklist:", userBlacklist);
-  closeFilters();
+  openFilters();
 }
 
 /**
@@ -37,10 +27,9 @@ function applyFilters() {
  *
  * @async
  * @function startSearch
- * @param {number} page - The page number for pagination.
  */
-async function startSearch(page = 1) {
-  currentPage = page;
+async function startSearch() {
+  currentPage = 1; // Reset page when starting new search
   const keywords = document.getElementById("keywords").value;
   const country = document.getElementById("country").value;
 
@@ -50,10 +39,7 @@ async function startSearch(page = 1) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         keywords,
-        country,
-        page,
-        limit: resultsPerPage,
-        blacklist: userBlacklist,
+        country /*, blacklist: userBlacklist*/,
       }),
     });
 
@@ -75,10 +61,13 @@ async function startSearch(page = 1) {
       body: JSON.stringify({ urls }),
     });
 
-    const scrapedData = await scrapeResponse.json();
-    console.log("🕷 Scraped Data:", scrapedData);
+    allResults = await scrapeResponse.json();
+    console.log("🕷 Scraped Data:", allResults);
 
-    displayResults(scrapedData, searchData.page, searchData.totalPages);
+    totalPages = Math.ceil(allResults.length / resultsPerPage);
+
+    updatePagination();
+    displayResults();
   } catch (error) {
     console.error("🚨 Error fetching data:", error);
     alert("Error fetching data: " + error.message);
@@ -86,18 +75,19 @@ async function startSearch(page = 1) {
 }
 
 /**
- * Displays the scraped data along with pagination controls.
- *
- * @function displayResults
- * @param {Array} scrapedData - The scraped data to display.
- * @param {number} currentPage - The current page number.
- * @param {number} totalPages - The total number of pages.
+ * Displays the scraped data for the current page.
  */
-function displayResults(scrapedData, currentPage, totalPages) {
+function displayResults() {
   const resultsList = document.getElementById("results");
   resultsList.innerHTML = "";
 
-  scrapedData.forEach((result) => {
+  const startIndex = (currentPage - 1) * resultsPerPage;
+  const paginatedResults = allResults.slice(
+    startIndex,
+    startIndex + resultsPerPage
+  );
+
+  paginatedResults.forEach((result) => {
     const li = document.createElement("li");
     li.innerHTML = `<strong>Name:</strong> ${result.name || "N/A"}<br>
                     <strong>URL:</strong> <a href="${
@@ -111,14 +101,23 @@ function displayResults(scrapedData, currentPage, totalPages) {
                     }<br>`;
     resultsList.appendChild(li);
   });
+}
 
+/**
+ * Updates the pagination controls.
+ */
+function updatePagination() {
   const paginationContainer = document.getElementById("pagination");
   paginationContainer.innerHTML = "";
 
   if (currentPage > 1) {
     const prevButton = document.createElement("button");
     prevButton.textContent = "Previous";
-    prevButton.onclick = () => startSearch(currentPage - 1);
+    prevButton.onclick = () => {
+      currentPage--;
+      displayResults();
+      updatePagination();
+    };
     paginationContainer.appendChild(prevButton);
   }
 
@@ -129,12 +128,45 @@ function displayResults(scrapedData, currentPage, totalPages) {
   if (currentPage < totalPages) {
     const nextButton = document.createElement("button");
     nextButton.textContent = "Next";
-    nextButton.onclick = () => startSearch(currentPage + 1);
+    nextButton.onclick = () => {
+      currentPage++;
+      displayResults();
+      updatePagination();
+    };
     paginationContainer.appendChild(nextButton);
   }
 }
 
 document.getElementById("search-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  startSearch(1);
+  startSearch();
 });
+
+/**
+ * Converts scraped results to CSV format and triggers a download.
+ */
+function downloadCSV() {
+  if (allResults.length === 0) {
+    alert("No data available to download.");
+    return;
+  }
+
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Name,URL,Email,Phone\n";
+
+  allResults.forEach((result) => {
+    const name = result.name.replace(/,/g, " ");
+    const url = result.url;
+    const emails = result.emails.length ? result.emails.join(" | ") : "N/A";
+    const phones = result.phones.length ? result.phones.join(" | ") : "N/A";
+    csvContent += `"${name}","${url}","${emails}","${phones}"\n`;
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "scraped_results.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

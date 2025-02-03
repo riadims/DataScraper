@@ -7,7 +7,7 @@ const router = express.Router();
 /**
  * POST /scrape
  *
- * Scrapes contact information by finding and navigating to the "Contact" page.
+ * Scrapes contact information from all provided URLs.
  */
 router.post("/", async (req, res) => {
   const { urls } = req.body;
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       .status(400)
       .json({
         error:
-          "Invalid URL format. Expecting a non-empty array of objects with { title, url }.",
+          "Invalid URL format. Expecting an array of { title, url } objects.",
       });
   }
 

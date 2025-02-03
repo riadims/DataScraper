@@ -8,13 +8,106 @@ const router = express.Router();
  * POST /search
  *
  * Handles search requests by querying the SerpAPI with provided keywords and country.
- * Supports pagination and allows blacklisting specific domains.
+ * Returns all results without pagination, applying the blacklist to filter out unwanted domains.
+ * Ensures only one page per domain is included.
  */
 router.post("/", async (req, res) => {
-  const { keywords, country, page = 1, limit = 10, blacklist = [] } = req.body;
+  const { keywords, country, blacklist = [] } = req.body;
+
   const numResults = 100;
 
-  const fullBlacklist = [...new Set([...blacklist])];
+  const tldBlacklist = new Set([
+    ".org",
+    ".edu",
+    ".gov",
+    ".int",
+    ".mil",
+    ".ngo",
+    ".ong",
+    ".info",
+    ".name",
+    ".pro",
+    ".biz",
+    ".net",
+    ".law",
+  ]);
+
+  const domainBlacklist = new Set([
+    "youtube.com",
+    "tripadvisor.com",
+    "forbes.com",
+    "reddit.com",
+    "quora.com",
+    "linkedin.com",
+    "facebook.com",
+    "tiktok.com",
+    "wikipedia.org",
+    "x.com",
+    "instagram.com",
+    "m.facebook.com",
+    "wikipedia.com",
+    "trustpilot.com",
+    "statista.com",
+    "shutterstock.com",
+    "healtheuropa.com",
+    "expats.cz",
+    "rutlandandpartners.com",
+    "euromonitor.com",
+    "peytonlegal.cz",
+    "alamy.com",
+    "visitczechia.com",
+    "cannacares.co.uk",
+    "imago-images.com",
+    "apps.apple.com",
+    "play.google.com",
+    "twitter.com",
+    "pinterest.com",
+    "flickr.com",
+    "snapchat.com",
+    "tumblr.com",
+    "vimeo.com",
+    "soundcloud.com",
+    "mixcloud.com",
+    "bandcamp.com",
+    "behance.net",
+    "dribbble.com",
+    "medium.com",
+    "wordpress.com",
+    "blogspot.com",
+    "twitch.tv",
+    "discord.com",
+    "telegram.org",
+    "whatsapp.com",
+    "messenger.com",
+    "slack.com",
+    "zoom.us",
+    "meet.google.com",
+    "hangouts.google.com",
+    "skype.com",
+    "linkedin.com",
+    "xing.com",
+    "vk.com",
+    "ok.ru",
+    "reddit.com",
+    "quora.com",
+    "stackexchange.com",
+    "stackoverflow.com",
+    "github.com",
+    "gitlab.com",
+    "bitbucket.org",
+    "sourceforge.net",
+    "codepen.io",
+    "jsfiddle.net",
+    "repl.it",
+    "glitch.com",
+    "netlify.com",
+    "vercel.com",
+    "heroku.com",
+    "aws.amazon.com",
+    "wikipedia.org",
+  ]);
+
+  blacklist.forEach((domain) => domainBlacklist.add(domain.toLowerCase()));
 
   try {
     const query = `${keywords} ${country}`;
@@ -31,27 +124,25 @@ router.post("/", async (req, res) => {
       throw new Error("Invalid API response structure");
     }
 
-    const results = response.data.organic_results
-      .map((result) => ({
-        title: result.title || "N/A",
-        url: typeof result.link === "string" ? result.link : "",
-      }))
-      .filter(
-        (item) => !fullBlacklist.some((domain) => item.url.includes(domain))
-      );
+    const uniqueDomains = new Set();
+    const filteredResults = [];
 
-    const totalResults = results.length;
-    const totalPages = Math.ceil(totalResults / limit);
-    const startIndex = (page - 1) * limit;
-    const paginatedResults = results.slice(startIndex, startIndex + limit);
+    response.data.organic_results.forEach((result) => {
+      if (!result.link) return;
+      const url = result.link.toLowerCase();
+      const domain = new URL(url).hostname.replace(/^www\./, "");
 
-    res.json({
-      page: page,
-      limit: limit,
-      totalResults: totalResults,
-      totalPages: totalPages,
-      results: paginatedResults,
+      if (
+        !Array.from(tldBlacklist).some((tld) => url.endsWith(tld)) &&
+        !domainBlacklist.has(domain) &&
+        !uniqueDomains.has(domain)
+      ) {
+        uniqueDomains.add(domain);
+        filteredResults.push({ title: result.title || "N/A", url });
+      }
     });
+
+    res.json({ results: filteredResults });
   } catch (error) {
     console.error("Search API Error:", error);
     res.status(500).json({ error: error.message });
