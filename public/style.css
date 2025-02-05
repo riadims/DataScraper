@@ -7,7 +7,6 @@ body {
 }
 
 #hero {
-    display: flex;
     justify-content: center;
     align-items: center;
     height: calc(50vh - 90px); /* Adjust height to account for navbar */
@@ -42,7 +41,7 @@ button, select {
 }
 
 input[type="text"] {
-    width: 260px; /* Set width for text input to match two buttons */
+    width: 263px; /* Set width for text input to match two buttons */
 }
 
 form {
