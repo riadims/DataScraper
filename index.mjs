@@ -29,11 +29,9 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-// Get the directory name (ESM compatible)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
@@ -46,8 +44,17 @@ app.use(express.static(path.join(__dirname, "public")));
  * @param {Object} res - Express response object.
  */
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public/pages", "index.html"));
 });
+
+app.get("/help", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/pages", "help.html"));
+});
+
+app.get("/support", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/pages", "support.html"));
+});
+
 
 // Routes
 app.use("/search", searchRoutes);

@@ -2,31 +2,70 @@ let currentPage = 1;
 const resultsPerPage = 10;
 let allResults = [];
 let totalPages = 1;
+let userBlacklist = new Set(); // Use a Set to avoid duplicates
 
 /**
  * Opens or closes the advanced filters popup.
  */
 function openFilters() {
   const popup = document.getElementById("filter-popup");
-  popup.style.display = popup.style.display === "block" ? "none" : "block";
+  if (popup.style.display === "block") {
+    popup.style.display = "none";
+  } else {
+    popup.style.display = "block";
+  }
 }
 
 /**
- * Applies the blacklist settings from checkboxes.
+ * Adds a website to the blacklist when Enter is pressed.
+ */
+function setupBlacklistInput() {
+  const input = document.getElementById("exclude-websites");
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const website = input.value.trim();
+      if (website) {
+        userBlacklist.add(website);
+        input.value = "";
+        updateBlacklistDisplay();
+      }
+    }
+  });
+}
+
+/**
+ * Updates the displayed blacklist in the popup.
+ */
+function updateBlacklistDisplay() {
+  const blacklistContainer = document.getElementById("blacklist-items");
+  blacklistContainer.innerHTML = "";
+
+  userBlacklist.forEach((website) => {
+    const item = document.createElement("div");
+    item.textContent = website;
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "X";
+    removeButton.onclick = () => {
+      userBlacklist.delete(website);
+      updateBlacklistDisplay();
+    };
+
+    item.appendChild(removeButton);
+    blacklistContainer.appendChild(item);
+  });
+}
+
+/**
+ * Closes the filters popup and applies the filters to the search results.
  */
 function applyFilters() {
-  userBlacklist = Array.from(
-    document.querySelectorAll(".filter-checkbox:checked")
-  ).map((checkbox) => checkbox.value);
-
   openFilters();
 }
 
 /**
  * Initiates the search and scraping process based on user input.
- *
- * @async
- * @function startSearch
  */
 async function startSearch() {
   currentPage = 1; // Reset page when starting new search
@@ -39,7 +78,8 @@ async function startSearch() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         keywords,
-        country /*, blacklist: userBlacklist*/,
+        country,
+        blacklist: Array.from(userBlacklist),
       }),
     });
 
@@ -78,8 +118,16 @@ async function startSearch() {
  * Displays the scraped data for the current page.
  */
 function displayResults() {
-  const resultsList = document.getElementById("results");
-  resultsList.innerHTML = "";
+  const resultsTable = document.getElementById("results");
+  const resultsSection = document.getElementById("results-section");
+  resultsTable.innerHTML = "";
+
+  if (allResults.length === 0) {
+    resultsSection.classList.add("hidden");
+    return;
+  } else {
+    resultsSection.classList.remove("hidden");
+  }
 
   const startIndex = (currentPage - 1) * resultsPerPage;
   const paginatedResults = allResults.slice(
@@ -88,19 +136,34 @@ function displayResults() {
   );
 
   paginatedResults.forEach((result) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>Name:</strong> ${result.name || "N/A"}<br>
-                    <strong>URL:</strong> <a href="${
-                      result.url
-                    }" target="_blank">${result.url}</a><br>
-                    <strong>Email:</strong> ${
-                      result.emails.length ? result.emails.join(", ") : "N/A"
-                    }<br>
-                    <strong>Phone:</strong> ${
-                      result.phones.length ? result.phones.join(", ") : "N/A"
-                    }<br>`;
-    resultsList.appendChild(li);
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${shortenText(result.name || "N/A", 20)}</td>
+                     <td><a href="${result.url}" target="_blank">${shortenText(
+      result.url,
+      30
+    )}</a></td>
+                     <td>${
+                       shortenArray(result.emails, 1).join(", ") || "N/A"
+                     }</td>
+                     <td>${
+                       shortenArray(result.phones, 1).join(", ") || "N/A"
+                     }</td>`;
+    resultsTable.appendChild(row);
   });
+}
+
+/**
+ * Shortens text to a specified length and adds ellipsis if necessary.
+ */
+function shortenText(text, maxLength) {
+  return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+}
+
+/**
+ * Limits the array to a specified length and adds ellipsis if necessary.
+ */
+function shortenArray(arr, maxLength) {
+  return arr.length > maxLength ? arr.slice(0, maxLength).concat("...") : arr;
 }
 
 /**
@@ -110,9 +173,17 @@ function updatePagination() {
   const paginationContainer = document.getElementById("pagination");
   paginationContainer.innerHTML = "";
 
+  if (allResults.length === 0) {
+    paginationContainer.classList.add("hidden");
+    return;
+  } else {
+    paginationContainer.classList.remove("hidden");
+  }
+
   if (currentPage > 1) {
     const prevButton = document.createElement("button");
     prevButton.textContent = "Previous";
+    prevButton.classList.add("pagination-button");
     prevButton.onclick = () => {
       currentPage--;
       displayResults();
@@ -128,6 +199,7 @@ function updatePagination() {
   if (currentPage < totalPages) {
     const nextButton = document.createElement("button");
     nextButton.textContent = "Next";
+    nextButton.classList.add("pagination-button");
     nextButton.onclick = () => {
       currentPage++;
       displayResults();
@@ -137,10 +209,13 @@ function updatePagination() {
   }
 }
 
+// Set up event listeners
 document.getElementById("search-form").addEventListener("submit", (e) => {
   e.preventDefault();
   startSearch();
 });
+
+setupBlacklistInput(); // Initialize the blacklist input functionality
 
 /**
  * Converts scraped results to CSV format and triggers a download.
@@ -169,4 +244,20 @@ function downloadCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+/**
+ * Footer year update on application start
+ */
+window.onload = () => {
+  updateFooterYear();
+};
+
+/**
+ * Updates the footer to display the current year.
+ */
+function updateFooterYear() {
+  const footerText = document.getElementById("rights");
+  const currentYear = new Date().getFullYear();
+  footerText.innerHTML = `&copy; ${currentYear} DataScraper. All rights reserved.`;
 }

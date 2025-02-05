@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
         const contactLink = await page.$$eval("a", (anchors) => {
-          const contactRegex = /contact/i;
+          const contactRegex = /kontakt|contact/i;
           for (const a of anchors) {
             if (contactRegex.test(a.innerText.trim())) {
               return a.href;
@@ -66,36 +66,49 @@ router.post("/", async (req, res) => {
             waitUntil: "domcontentloaded",
             timeout: 30000,
           });
-
-          const content = await page.content();
-
-          const tableContent = await page.evaluate(() => {
-            const tables = Array.from(document.querySelectorAll("table"));
-            return tables.map((table) => table.innerText).join("\n");
-          });
-
-          const combinedContent = `${content}\n${tableContent}`;
-
-          const linkPhones = await page.evaluate(() => {
-            const links = Array.from(
-              document.querySelectorAll('a[href^="tel:"]')
-            );
-            return links.map((link) => link.href.replace(/^tel:/, ""));
-          });
-
-          const { emails: extractedEmails, phones: extractedPhones } =
-            extractData(combinedContent);
-          emails = extractedEmails;
-          phones = [...extractedPhones, ...linkPhones];
-        } else {
-          console.log(`⚠️ No contact link found on: ${url}`);
         }
 
-        results.push({ name: title || "N/A", url, emails, phones });
+        const plainText = await page.evaluate(() => {
+          return document.body.innerText;
+        });
+
+        const tableContent = await page.evaluate(() => {
+          return Array.from(document.querySelectorAll("table"))
+            .map((table) => table.innerText)
+            .join("\n");
+        });
+
+        const navContent = await page.evaluate(() => {
+          return Array.from(
+            document.querySelectorAll("nav, span, a, .cart, .checkout")
+          )
+            .map((el) => el.innerText)
+            .join("\n");
+        });
+
+        const allTextContent = await page.evaluate(() => {
+          return document.body.textContent;
+        });
+
+        const combinedContent = `${plainText}\n${tableContent}\n${navContent}\n${allTextContent}`;
+
+        const linkPhones = await page.evaluate(() => {
+          return Array.from(document.querySelectorAll('a[href^="tel:"]')).map(
+            (link) => link.href.replace(/^tel:/, "")
+          );
+        });
+
+        const { emails: extractedEmails, phones: extractedPhones } =
+          extractData(combinedContent);
+
+        emails = extractedEmails;
+        phones = [...extractedPhones, ...linkPhones];
+
+        results.push({ name: title || "None found", url, emails, phones });
         await page.close();
       } catch (error) {
         console.error(`❌ Error scraping ${url}:`, error);
-        results.push({ name: title || "N/A", url, emails, phones });
+        results.push({ name: title || "None found", url, emails, phones });
       }
     }
 

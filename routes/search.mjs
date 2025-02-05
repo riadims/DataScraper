@@ -50,6 +50,8 @@ router.post("/", async (req, res) => {
     "statista.com",
     "shutterstock.com",
     "healtheuropa.com",
+    "eea.europa.eu",
+    "ie.trustpilot.com",
     "expats.cz",
     "rutlandandpartners.com",
     "euromonitor.com",
@@ -105,6 +107,8 @@ router.post("/", async (req, res) => {
     "heroku.com",
     "aws.amazon.com",
     "wikipedia.org",
+    ".trustpilot.com",
+    "businesswire.com",
   ]);
 
   blacklist.forEach((domain) => domainBlacklist.add(domain.toLowerCase()));
@@ -131,10 +135,12 @@ router.post("/", async (req, res) => {
       if (!result.link) return;
       const url = result.link.toLowerCase();
       const domain = new URL(url).hostname.replace(/^www\./, "");
+      const extractedDomain = domain.split('.').slice(-2).join('.');
 
       if (
-        !Array.from(tldBlacklist).some((tld) => url.endsWith(tld)) &&
+        !Array.from(tldBlacklist).some((tld) => extractedDomain.endsWith(tld)) &&
         !domainBlacklist.has(domain) &&
+        !domainBlacklist.has(extractedDomain) &&
         !uniqueDomains.has(domain)
       ) {
         uniqueDomains.add(domain);

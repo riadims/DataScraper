@@ -1,0 +1,170 @@
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(50vh - 90px); /* Adjust height to account for navbar */
+    text-align: center;
+}
+
+.navbar {
+    background: linear-gradient(to bottom, #C1EAFF, white);
+    height: 80px; /* Increase navbar height */
+}
+
+#hero h5 {
+    width: 100%; /* Widen the h5 element */
+    white-space: nowrap; /* Ensure the text is in one line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 20px; /* Adjust spacing below h5 */
+}
+
+#search {
+    margin-top: 20px; /* Adjust spacing above the search section */
+}
+
+input, button, select {
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: white; /* Set background color to white */
+}
+
+button, select {
+    width: 130px; /* Set a fixed width for buttons and dropdown */
+}
+
+input[type="text"] {
+    width: 260px; /* Set width for text input to match two buttons */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form > * {
+    margin-bottom: 10px; /* Add spacing between form elements */
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    gap: 3px; /* Add spacing between elements in the row */
+}
+
+button[type="submit"], button[onclick="openFilters()"], button[onclick="applyFilters()"], button[onclick="downloadCSV()"], .pagination-button {
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: white; /* Set background color to white */
+    text-align: center; /* Center text */
+}
+
+button[type="submit"]:hover, select:hover, button[onclick="openFilters()"]:hover, button[onclick="applyFilters()"]:hover, button[onclick="downloadCSV()"]:hover {
+    background-color: #C1EAFF; /* Change background color on hover */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transform: scale(1.01); /* Slightly scale up on hover */
+    transition: transform 0.3s; /* Add a 0.3s transform transition */
+}
+
+.pagination-button:hover{
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+#filter-popup {
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 300px; /* Reduce the width */
+    padding: 10px; /* Reduce padding */
+    display: none; /* Hide on start */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, #C1EAFF, white);
+}
+
+#filter-popup h3 {
+    font-size: 1.2em; /* Reduce the size of the heading */
+    text-align: center;
+}
+
+#blacklist-items div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    width: 100%; /* Ensure the div takes full width */
+}
+
+#blacklist-items div button {
+    border: none;
+    background: none;
+    color: rgb(155, 8, 8);
+    cursor: pointer;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* Add spacing above buttons */
+}
+
+.button-row button {
+    width: 48%; /* Make buttons smaller and fit in a single row */
+}
+
+#results-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#results-table {
+    width: 100%; /* Widen the table */
+    max-width: 1200px; /* Set maximum width */
+    margin: 0 auto; /* Center the table horizontally */
+    table-layout: fixed; /* Ensure table layout is fixed */
+}
+
+#results-table th, #results-table td {
+    white-space: nowrap; /* Prevent text wrapping */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    width: 25%; /* Widen the columns */
+    text-align: center; /* Center text in table headers and cells */
+}
+
+.table-striped > tbody > tr:nth-child(odd)>td {
+    background-color: #f1faff; /* Custom color for striped table rows */
+  }
+
+footer {
+    background: linear-gradient(to top, #C1EAFF, white);
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Add styles to hide the table and pagination buttons when there are no results */
+#results-section.hidden, #pagination.hidden {
+    display: none;
+}
+
+.card-img-top {
+    width: 300px; /* Set a fixed width for all card images */
+    height: 300px; /* Set a fixed height for all card images */
+    object-fit:contain; /* Ensure the image covers the entire area */
+}
+
+.card-body {
+    text-align: center; /* Center the text in card bodies */
+}
