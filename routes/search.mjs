@@ -109,6 +109,16 @@ router.post("/", async (req, res) => {
     "wikipedia.org",
     ".trustpilot.com",
     "businesswire.com",
+    "finance.yahoo.com",
+    "yahoo.com",
+    "sciencedirect.com",
+    "bbc.com",
+    "nytimes.com",
+    "reuters.com",
+    "bloomberg.com",
+    "politico.eu",
+    "euronews.com",
+    
   ]);
 
   blacklist.forEach((domain) => domainBlacklist.add(domain.toLowerCase()));
@@ -141,7 +151,8 @@ router.post("/", async (req, res) => {
         !Array.from(tldBlacklist).some((tld) => extractedDomain.endsWith(tld)) &&
         !domainBlacklist.has(domain) &&
         !domainBlacklist.has(extractedDomain) &&
-        !uniqueDomains.has(domain)
+        !uniqueDomains.has(domain) &&
+        !url.includes("news")
       ) {
         uniqueDomains.add(domain);
         filteredResults.push({ title: result.title || "N/A", url });

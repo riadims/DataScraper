@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
         const contactLink = await page.$$eval("a", (anchors) => {
-          const contactRegex = /kontakt|contact/i;
+          const contactRegex = /kontakt|contact|contacts|contact us/i;
           for (const a of anchors) {
             if (contactRegex.test(a.innerText.trim())) {
               return a.href;
@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
 
         const navContent = await page.evaluate(() => {
           return Array.from(
-            document.querySelectorAll("nav, span, a, .cart, .checkout")
+            document.querySelectorAll("nav, span, a, .cart, .checkout, .headercart")
           )
             .map((el) => el.innerText)
             .join("\n");
