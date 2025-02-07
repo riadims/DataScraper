@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { keywords, country, blacklist = [] } = req.body;
 
-  const numResults = 100;
+  const numResults = 300;
 
   const tldBlacklist = new Set([
     ".org",
