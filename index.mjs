@@ -67,5 +67,5 @@ app.use("/scrape", scrapeRoutes);
  * @param {number} port - The port number to listen on.
  */
 app.listen(config.port, () => {
-  console.log(`Server running on http://localhost:${config.port}`);
+  console.log(`Server running PORT:${config.port}`);
 });

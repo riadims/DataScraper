@@ -2,7 +2,9 @@ let currentPage = 1;
 const resultsPerPage = 10;
 let allResults = [];
 let totalPages = 1;
-let userBlacklist = new Set(); // Use a Set to avoid duplicates
+let userBlacklist = new Set();
+const API_BASE_URL = window.location.origin;
+
 
 /**
  * Opens or closes the advanced filters popup.
@@ -73,7 +75,7 @@ async function startSearch() {
   const country = document.getElementById("country").value;
 
   try {
-    const searchResponse = await fetch("http://localhost:3000/search", {
+    const searchResponse = await fetch(`${API_BASE_URL}/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -95,7 +97,7 @@ async function startSearch() {
       url: item.url,
     }));
 
-    const scrapeResponse = await fetch("http://localhost:3000/scrape", {
+    const scrapeResponse = await fetch(`${API_BASE_URL}/scrape`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ urls }),
