@@ -70,7 +70,7 @@ function applyFilters() {
  * Initiates the search and scraping process based on user input.
  */
 async function startSearch() {
-  currentPage = 1; // Reset page when starting new search
+  currentPage = 1;
   const keywords = document.getElementById("keywords").value;
   const country = document.getElementById("country").value;
 
