@@ -27,7 +27,12 @@ import { fileURLToPath } from "url";
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

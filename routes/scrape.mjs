@@ -19,7 +19,10 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--disable-gpu", "--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const results = [];
 
     for (const { url, title } of urls) {
@@ -37,7 +40,7 @@ router.post("/", async (req, res) => {
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
         const contactLink = await page.evaluate(() => {
-          const contactRegex = /kontakt|about us|contact|contacts|contact us|kontaktujte/i;
+          const contactRegex = /kontakt|kontakty|about us|contact|contacts|contact us|kontaktujte/i;
           const links = Array.from(document.querySelectorAll("a"));
           for (const a of links) {
             if (contactRegex.test(a.innerText.trim())) {
