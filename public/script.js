@@ -91,6 +91,7 @@ async function startSearch() {
     console.log("🔍 Search Response:", searchData);
 
     if (!searchData.results || !Array.isArray(searchData.results)) {
+      loading.hidden = true;
       throw new Error("Unexpected response format, expected an array");
     }
 
@@ -116,6 +117,7 @@ async function startSearch() {
     updatePagination();
     displayResults();
   } catch (error) {
+    loading.hidden = true;
     console.error("🚨 Error fetching data:", error);
     alert("Error fetching data: " + error.message);
   }
