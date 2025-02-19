@@ -4,14 +4,7 @@ let allResults = [];
 let totalPages = 1;
 let userBlacklist = new Set();
 const API_BASE_URL = window.location.origin;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 const loading = document.getElementById("loading-section");
->>>>>>> Stashed changes
-=======
-const loading = document.getElementById("loading-section");
->>>>>>> Stashed changes
 
 /**
  * Opens or closes the advanced filters popup.
@@ -77,16 +70,8 @@ function applyFilters() {
  * Initiates the search and scraping process based on user input.
  */
 async function startSearch() {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  console.log("🔍 Starting search...");
-  currentPage = 1;
-=======
-=======
->>>>>>> Stashed changes
   loading.hidden = false;
   currentPage = 1; // Reset page when starting new search
->>>>>>> Stashed changes
   const keywords = document.getElementById("keywords").value;
   const country = document.getElementById("country").value;
 
@@ -123,15 +108,8 @@ async function startSearch() {
     console.log("🔍 Scrape done");
   
     allResults = await scrapeResponse.json();
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    console.log("🔍 Scrape Response:", allResults);
-=======
-=======
->>>>>>> Stashed changes
     loading.hidden = true;
     console.log("🕷 Scraped Data:", allResults);
->>>>>>> Stashed changes
 
     totalPages = Math.ceil(allResults.length / resultsPerPage);
 
