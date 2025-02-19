@@ -2,6 +2,7 @@ import express from "express";
 import axios from "axios";
 import config from "../config.mjs";
 import { promises as fs } from "fs";
+import logger from "../utils/logger.mjs";
 
 const router = express.Router();
 
@@ -26,7 +27,6 @@ router.post("/", async (req, res) => {
 
   const countries = await getCountries();
   const countryCode = countries[country];
-  console.log(countryCode);
   if (!countryCode) {
     return res.status(400).json({ error: "Invalid country name" });
   }
@@ -98,6 +98,7 @@ router.post("/", async (req, res) => {
     "messenger.com",
     "slack.com",
     "zoom.us",
+    "theses.cz",
     "meet.google.com",
     "hangouts.google.com",
     "skype.com",
@@ -178,10 +179,10 @@ router.post("/", async (req, res) => {
         filteredResults.push({ title: result.title || "N/A", url });
       }
     });
-
+    logger.log(`Search over.`);
     res.json({ results: filteredResults });
   } catch (error) {
-    console.error("Search API Error:", error);
+    logger.error("Search API Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
