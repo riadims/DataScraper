@@ -5,7 +5,6 @@ let totalPages = 1;
 let userBlacklist = new Set();
 const API_BASE_URL = window.location.origin;
 
-
 /**
  * Opens or closes the advanced filters popup.
  */
@@ -70,11 +69,13 @@ function applyFilters() {
  * Initiates the search and scraping process based on user input.
  */
 async function startSearch() {
-  currentPage = 1; // Reset page when starting new search
+  console.log("🔍 Starting search...");
+  currentPage = 1;
   const keywords = document.getElementById("keywords").value;
   const country = document.getElementById("country").value;
 
   try {
+    console.log(`🔍 Sending search request with keywords: ${keywords}, country: ${country}`);
     const searchResponse = await fetch(`${API_BASE_URL}/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -97,14 +98,16 @@ async function startSearch() {
       url: item.url,
     }));
 
+    console.log("🔍 Sending scrape request with URLs:", urls);
     const scrapeResponse = await fetch(`${API_BASE_URL}/scrape`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ urls }),
     });
-
+    console.log("🔍 Scrape done");
+  
     allResults = await scrapeResponse.json();
-    console.log("🕷 Scraped Data:", allResults);
+    console.log("🔍 Scrape Response:", allResults);
 
     totalPages = Math.ceil(allResults.length / resultsPerPage);
 
@@ -214,6 +217,7 @@ function updatePagination() {
 // Set up event listeners
 document.getElementById("search-form").addEventListener("submit", (e) => {
   e.preventDefault();
+  console.log("🔍 Form submitted, starting search");
   startSearch();
 });
 
@@ -239,10 +243,12 @@ function downloadCSV() {
     csvContent += `"${name}","${url}","${emails}","${phones}"\n`;
   });
 
+  const keywords = document.getElementById("keywords").value;
+  const country = document.getElementById("country").value;
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "scraped_results.csv");
+  link.setAttribute("download", `${keywords}_${country}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -1,8 +1,17 @@
 import express from "express";
 import axios from "axios";
 import config from "../config.mjs";
+import { promises as fs } from "fs";
+import logger from "../utils/logger.mjs";
 
 const router = express.Router();
+
+async function getCountries() {
+  const data = await fs.readFile(
+    new URL("../utils/countries.json", import.meta.url)
+  );
+  return JSON.parse(data);
+}
 
 /**
  * POST /search
@@ -14,7 +23,13 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { keywords, country, blacklist = [] } = req.body;
 
-  const numResults = 300;
+  const numResults = 500;
+
+  const countries = await getCountries();
+  const countryCode = countries[country];
+  if (!countryCode) {
+    return res.status(400).json({ error: "Invalid country name" });
+  }
 
   const tldBlacklist = new Set([
     ".org",
@@ -83,6 +98,7 @@ router.post("/", async (req, res) => {
     "messenger.com",
     "slack.com",
     "zoom.us",
+    "theses.cz",
     "meet.google.com",
     "hangouts.google.com",
     "skype.com",
@@ -118,16 +134,19 @@ router.post("/", async (req, res) => {
     "bloomberg.com",
     "politico.eu",
     "euronews.com",
-    
   ]);
 
   blacklist.forEach((domain) => domainBlacklist.add(domain.toLowerCase()));
 
   try {
     const query = `${keywords} ${country}`;
-    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(
-      query
-    )}&api_key=${config.serpApiKey}&num=${numResults}`;
+    const url =
+      `https://serpapi.com/search.json?q=${encodeURIComponent(query)}` +
+      `&api_key=${config.serpApiKey}` +
+      `&num=${numResults}` +
+      `&cr=country${countryCode}` +
+      `&tbs=li:1` +
+      `&nfpr=1`;
 
     const response = await axios.get(url);
 
@@ -145,10 +164,12 @@ router.post("/", async (req, res) => {
       if (!result.link) return;
       const url = result.link.toLowerCase();
       const domain = new URL(url).hostname.replace(/^www\./, "");
-      const extractedDomain = domain.split('.').slice(-2).join('.');
+      const extractedDomain = domain.split(".").slice(-2).join(".");
 
       if (
-        !Array.from(tldBlacklist).some((tld) => extractedDomain.endsWith(tld)) &&
+        !Array.from(tldBlacklist).some((tld) =>
+          extractedDomain.endsWith(tld)
+        ) &&
         !domainBlacklist.has(domain) &&
         !domainBlacklist.has(extractedDomain) &&
         !uniqueDomains.has(domain) &&
@@ -158,10 +179,10 @@ router.post("/", async (req, res) => {
         filteredResults.push({ title: result.title || "N/A", url });
       }
     });
-
+    logger.log(`Search over.`);
     res.json({ results: filteredResults });
   } catch (error) {
-    console.error("Search API Error:", error);
+    logger.error("Search API Error:", error);
     res.status(500).json({ error: error.message });
   }
 });

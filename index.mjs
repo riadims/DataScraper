@@ -19,15 +19,28 @@ import scrapeRoutes from "./routes/scrape.mjs";
 import config from "./config.mjs";
 import path from "path";
 import { fileURLToPath } from "url";
+import logger from "./utils/logger.mjs";
 
 /**
  * Express application instance.
  * @type {import('express').Application}
  */
 const app = express();
-
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://scraper.dev-itmelona.eu/"
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));  
+
+app.use((req, res, next) => {
+  logger.log(`Received Request: ${req.method} ${req.url} - Body: ${JSON.stringify(req.body)}`);
+  next();
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,5 +80,5 @@ app.use("/scrape", scrapeRoutes);
  * @param {number} port - The port number to listen on.
  */
 app.listen(config.port, () => {
-  console.log(`Server running PORT:${config.port}`);
+  logger.log(`Server running on PORT:${config.port}`);
 });
