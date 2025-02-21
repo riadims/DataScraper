@@ -1,8 +1,8 @@
 import express from "express";
 import axios from "axios";
 import config from "../config.mjs";
-import { promises as fs } from "fs";
 import logger from "../utils/logger.mjs";
+import { promises as fs } from "fs";
 
 const router = express.Router();
 
@@ -50,6 +50,7 @@ router.post("/", async (req, res) => {
   const domainBlacklist = new Set([
     "youtube.com",
     "tripadvisor.com",
+    "booking.com",
     "forbes.com",
     "reddit.com",
     "quora.com",
@@ -63,6 +64,19 @@ router.post("/", async (req, res) => {
     "wikipedia.com",
     "trustpilot.com",
     "statista.com",
+    "firmy.cz",
+    "cbdb.cz",
+    "windguru.cz",
+    "adulto.cz",
+    "litex.cz",
+    "olympia-centrum.cz",
+    "vskp.vse.cz",
+    "czechtradeoffices.com",
+    "savills.cz",
+    "mapy.cz",
+    "praguemorning.cz",
+    "english.radio.cz",
+    "heureka.cz",
     "shutterstock.com",
     "healtheuropa.com",
     "eea.europa.eu",
@@ -120,11 +134,47 @@ router.post("/", async (req, res) => {
     "glitch.com",
     "netlify.com",
     "vercel.com",
+    "amazon.com",
+    "fedex.com",
+    "ups.com",
+    "dhl.com",
+    "usps.com",
+    "canadapost.ca",
+    "royalmail.com",
+    "dpd.com",
+    "hermesworld.com",
+    "dpd.co.uk",
+    "parcelforce.com",
+    "yodel.co.uk",
+    "dhgate.com",
+    "aliexpress.com",
+    "alibaba.com",
+    "dhgate.com",
+    "aliexpress.com",
+    "alibaba.com",
+    "ebay.com",
+    "etsy.com",
+    "glovoapp.com",
+    "deliveroo.com","just-eat.com",
+    "ubereats.com",
+    "bolt.eu",
+    "kapten.com",
+    "free-now.com",
+    "lyft.com",
+    "amazon.com",
+    "amazon.co.uk",
+    "amazon.de",
+    "amazon.fr",
     "heroku.com",
     "aws.amazon.com",
     "wikipedia.org",
+    "revolut.com",
+    "transferwise.com",
+    "wise.com",
     ".trustpilot.com",
+    "www.thcbd.at",
     "businesswire.com",
+    "https://www.thcbd.at/",
     "finance.yahoo.com",
     "yahoo.com",
     "sciencedirect.com",
@@ -173,7 +223,7 @@ router.post("/", async (req, res) => {
         !domainBlacklist.has(domain) &&
         !domainBlacklist.has(extractedDomain) &&
         !uniqueDomains.has(domain) &&
-        !url.includes("news")
+        !url.includes("news","gov","edu","org","int","mil","ngo","ong","info","name","pro","biz","net","law")
       ) {
         uniqueDomains.add(domain);
         filteredResults.push({ title: result.title || "N/A", url });

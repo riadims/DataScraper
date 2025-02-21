@@ -104,7 +104,7 @@ async function startSearch() {
     const scrapeResponse = await fetch(`${API_BASE_URL}/scrape`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ urls }),
+      body: JSON.stringify({ urls, country }),
     });
     console.log("🔍 Scrape done");
   

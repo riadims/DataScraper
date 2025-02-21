@@ -68,8 +68,6 @@ app.get("/support", (req, res) => {
   res.sendFile(path.join(__dirname, "public/pages", "support.html"));
 });
 
-
-// Routes
 app.use("/search", searchRoutes);
 app.use("/scrape", scrapeRoutes);
 
