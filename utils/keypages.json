@@ -1,0 +1,236 @@
+{
+  "countries": [
+    {
+      "name": "Austria",
+      "contact": ["Kontakt", "Kontaktieren Sie uns"],
+      "about_us": ["Über uns", "Über unsere Firma"],
+      "cart": ["Warenkorb"],
+      "checkout": ["Kasse", "Zur Kasse"],
+      "customer_support": ["Kundendienst", "Kundenservice", "Hilfe"]
+    },
+    {
+      "name": "Belgium",
+      "contact": ["Contact", "Contactez-nous", "Neem contact op"],
+      "about_us": ["À propos", "Over ons", "Over ons bedrijf"],
+      "cart": ["Panier", "Winkelwagen"],
+      "checkout": ["Paiement", "Afrekenen"],
+      "customer_support": ["Service client", "Klantenservice", "Hulp"]
+    },
+    {
+      "name": "Bulgaria",
+      "contact": ["Контакт", "Свържете се с нас"],
+      "about_us": ["За нас", "За компанията"],
+      "cart": ["Количка"],
+      "checkout": ["Плащане", "Поръчка"],
+      "customer_support": ["Обслужване на клиенти", "Помощ"]
+    },
+    {
+      "name": "Croatia",
+      "contact": ["Kontakt", "Obratite nam se"],
+      "about_us": ["O nama", "O poduzeću"],
+      "cart": ["Košarica"],
+      "checkout": ["Blagajna"],
+      "customer_support": ["Korisnička podrška", "Pomoć"]
+    },
+    {
+      "name": "Cyprus",
+      "contact": ["Επικοινωνία", "Επικοινωνήστε μαζί μας", "Επαφές", "İletişim", "Bize Ulaşın"],
+      "about_us": ["Σχετικά", "Σχετικά με εμάς", "Hakkında", "Hakkımızda"],
+      "cart": ["Καλάθι", "Sepet"],
+      "checkout": ["Ταμείο", "Πληρωμή", "Ödeme", "Kasa"],
+      "customer_support": ["Υποστήριξη πελατών", "Βοήθεια", "Υποστήριξη", "Müşteri Desteği", "Yardım", "Destek"]
+    },
+    {
+      "name": "Czech",
+      "contact": ["Kontakt", "Kontaktujte nás", "Kontakty"],
+      "about_us": ["O nás", "O společnosti", "O firmě"],
+      "cart": ["Košík"],
+      "checkout": ["Pokladna", "Objednávka"],
+      "customer_support": ["Zákaznická podpora", "Pomoc"]
+    },
+    {
+      "name": "Denmark",
+      "contact": ["Kontakt", "Kontakt os"],
+      "about_us": ["Om os", "Om virksomheden"],
+      "cart": ["Indkøbskurv"],
+      "checkout": ["Betaling", "Til kassen"],
+      "customer_support": ["Kundeservice", "Hjælp"]
+    },
+    {
+      "name": "England",
+      "contact": ["Contact", "Contact Us", "Contacts"],
+      "about_us": ["About", "About us"],
+      "cart": ["Cart"],
+      "checkout": ["checkout", "Payment"],
+      "customer_support": ["Customer support", "Help", "Support"]
+    },
+    {
+      "name": "Estonia",
+      "contact": ["Kontakt", "Võtke meiega ühendust"],
+      "about_us": ["Meist", "Ettevõttest"],
+      "cart": ["Ostukorv"],
+      "checkout": ["Makse", "Kassasse"],
+      "customer_support": ["Klienditugi", "Abi"]
+    },
+    {
+      "name": "Finland",
+      "contact": ["Yhteystiedot", "Ota yhteyttä"],
+      "about_us": ["Tietoa meistä", "Yrityksestä"],
+      "cart": ["Ostoskori"],
+      "checkout": ["Kassa", "Maksu"],
+      "customer_support": ["Asiakaspalvelu", "Tuki"]
+    },
+    {
+      "name": "France",
+      "contact": ["Contact", "Contactez-nous", "Nous contacter"],
+      "about_us": ["À propos", "Qui sommes-nous"],
+      "cart": ["Panier"],
+      "checkout": ["Paiement", "Commander"],
+      "customer_support": ["Service client", "Assistance"]
+    },
+    {
+      "name": "Germany",
+      "contact": ["Kontakt", "Kontaktieren Sie uns"],
+      "about_us": ["Über uns", "Unsere Firma"],
+      "cart": ["Warenkorb"],
+      "checkout": ["Kasse", "Bezahlen"],
+      "customer_support": ["Kundendienst", "Hilfe"]
+    },
+    {
+      "name": "Greece",
+      "contact": ["Επικοινωνία", "Επικοινωνήστε μαζί μας"],
+      "about_us": ["Σχετικά με εμάς", "Πληροφορίες για την εταιρεία"],
+      "cart": ["Καλάθι"],
+      "checkout": ["Πληρωμή"],
+      "customer_support": ["Υποστήριξη πελατών", "Βοήθεια"]
+    },
+    {
+      "name": "Hungary",
+      "contact": ["Kapcsolat", "Lépjen kapcsolatba velünk"],
+      "about_us": ["Rólunk", "Cégünkről"],
+      "cart": ["Kosár"],
+      "checkout": ["Pénztár"],
+      "customer_support": ["Ügyfélszolgálat", "Segítség"]
+    },
+    {
+      "name": "Iceland",
+      "contact": ["Hafðu Samband", "Hafðu Samband Við Okkur", "Tengiliðir"],
+      "about_us": ["Um Okkur", "Um"],
+      "cart": ["Karfa"],
+      "checkout": ["Ganga frá pöntun", "Greiðsla"],
+      "customer_support": ["Þjónustuver", "Hjálp", "Stuðningur"]
+    },    
+    {
+      "name": "Ireland",
+      "contact": ["Teagmháil", "Déan Teagmháil Linn", "Teagmhálacha"],
+      "about_us": ["Fúinn", "Eolas Fúinn"],
+      "cart": ["Cairt"],
+      "checkout": ["Seiceáil Amach", "Íocaíocht"],
+      "customer_support": ["Tacaíocht do Chustaiméirí", "Cabhair", "Tacaíocht"]
+    },    
+    {
+      "name": "Italy",
+      "contact": ["Contatti", "Contattaci"],
+      "about_us": ["Chi siamo", "Informazioni su di noi"],
+      "cart": ["Carrello"],
+      "checkout": ["Cassa", "Pagamento"],
+      "customer_support": ["Servizio clienti", "Supporto"]
+    },
+    {
+      "name": "Latvia",
+      "contact": ["Kontakti", "Sazināties", "Sazinieties ar mums"],
+      "about_us": ["Par Mums", "Par"],
+      "cart": ["Grozs"],
+      "checkout": ["Apmaksa", "Maksājums"],
+      "customer_support": ["Klientu atbalsts", "Palīdzība", "Atbalsts"]
+    },
+    {
+      "name": "Lithuania",
+      "contact": ["Kontaktai", "Susisiekti", "Susisiekite su mumis"],
+      "about_us": ["Apie mus", "Apie"],
+      "cart": ["Krepšelis"],
+      "checkout": ["Atsiskaitymas", "Mokėjimas"],
+      "customer_support": ["Klientų aptarnavimas", "Pagalba", "Palaikymas"]
+    },
+    {
+      "name": "Luxembourg",
+      "contact": ["Kontakt", "Kontaktéiert eis"],
+      "about_us": ["Iwwer eis", "Iwwer"],
+      "cart": ["Akafskuerf"],
+      "checkout": ["Kees", "Bezuelung"],
+      "customer_support": ["Clientssupport", "Hëllef", "Ënnerstëtzung"]
+    },
+    {
+      "name": "Malta",
+      "contact": ["Kuntatt", "Ikkuntattjana"],
+      "about_us": ["Fuqna"],
+      "cart": ["Karettun"],
+      "checkout": ["Ħlas", "Pagament"],
+      "customer_support": ["Appoġġ lill-klijenti", "Għajnuna", "Appoġġ"]
+    },                
+    {
+      "name": "Netherlands",
+      "contact": ["Contact", "Neem contact op"],
+      "about_us": ["Over ons", "Over ons bedrijf"],
+      "cart": ["Winkelwagen"],
+      "checkout": ["Afrekenen"],
+      "customer_support": ["Klantenservice", "Hulp"]
+    },
+    {
+      "name": "Portugal",
+      "contact": ["Contato", "Fale Conosco"],
+      "about_us": ["Sobre Nós", "Sobre"],
+      "cart": ["Carrinho"],
+      "checkout": ["Finalizar Compra", "Pagamento"],
+      "customer_support": ["Apoio ao Cliente", "Ajuda", "Suporte"]
+    },    
+    {
+      "name": "Poland",
+      "contact": ["Kontakt", "Skontaktuj się z nami"],
+      "about_us": ["O nas", "Informacje o firmie"],
+      "cart": ["Koszyk"],
+      "checkout": ["Kasa"],
+      "customer_support": ["Obsługa klienta", "Pomoc"]
+    },
+    {
+      "name": "Romania",
+      "contact": ["Contact", "Contactați-ne", "Contacte"],
+      "about_us": ["Despre Noi", "Despre"],
+      "cart": ["Coș"],
+      "checkout": ["Finalizare comandă", "Plată"],
+      "customer_support": ["Asistență Clienți", "Ajutor", "Suport"]
+    },
+    {
+      "name": "Slovakia",
+      "contact": ["Kontakt", "Kontaktujte nás", "Kontakty"],
+      "about_us": ["O nás"],
+      "cart": ["Košík"],
+      "checkout": ["Pokladňa", "Platba"],
+      "customer_support": ["Zákaznícka podpora", "Pomoc", "Podpora"]
+    },
+    {
+      "name": "Slovenia",
+      "contact": ["Kontakt", "Kontaktirajte nas", "Kontakti"],
+      "about_us": ["O nas"],
+      "cart": ["Košarica"],
+      "checkout": ["Blagajna", "Plačilo"],
+      "customer_support": ["Podpora strankam", "Pomoč", "Podpora"]
+    },            
+    {
+      "name": "Spain",
+      "contact": ["Contacto", "Contáctenos"],
+      "about_us": ["Sobre nosotros", "Acerca de nosotros"],
+      "cart": ["Carrito"],
+      "checkout": ["Pagar", "Caja"],
+      "customer_support": ["Atención al cliente", "Soporte"]
+    },
+    {
+      "name": "Sweden",
+      "contact": ["Kontakt", "Kontakta oss"],
+      "about_us": ["Om oss", "Om företaget"],
+      "cart": ["Kundvagn"],
+      "checkout": ["Kassa"],
+      "customer_support": ["Kundtjänst", "Support"]
+    }
+  ]
+}
