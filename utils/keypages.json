@@ -1,6 +1,14 @@
 {
   "countries": [
     {
+      "name": "Australia",
+      "contact": ["Contact", "Contact Us"],
+      "about_us": ["About", "About us"],
+      "cart": ["Cart"],
+      "checkout": ["Checkout", "Payment"],
+      "customer_support": ["Customer support", "Help", "Support"]
+    },
+    {
       "name": "Austria",
       "contact": ["Kontakt", "Kontaktieren Sie uns"],
       "about_us": ["Über uns", "Über unsere Firma"],
@@ -231,6 +239,22 @@
       "cart": ["Kundvagn"],
       "checkout": ["Kassa"],
       "customer_support": ["Kundtjänst", "Support"]
+    },
+    {
+      "name": "United Kingdom",
+      "contact": ["Contact", "Contact Us"],
+      "about_us": ["About", "About us"],
+      "cart": ["Cart"],
+      "checkout": ["Checkout", "Payment"],
+      "customer_support": ["Customer support", "Help", "Support"]
+    },
+    {
+      "name": "United States",
+      "contact": ["Contact", "Contact Us"],
+      "about_us": ["About", "About us"],
+      "cart": ["Cart"],
+      "checkout": ["Checkout", "Payment"],
+      "customer_support": ["Customer support", "Help", "Support"]
     }
   ]
 }

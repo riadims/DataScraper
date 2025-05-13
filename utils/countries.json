@@ -1,4 +1,5 @@
 {
+    "Australia": "AU",
     "Austria": "AT",
     "Belgium": "BE",
     "Bulgaria": "BG",
@@ -26,5 +27,6 @@
     "Slovakia": "SK",
     "Slovenia": "SI",
     "Spain": "ES",
-    "Sweden": "SE"
+    "Sweden": "SE",
+    "United States": "US"
 }
