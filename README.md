@@ -49,7 +49,7 @@ Having these prerequisites in place will ensure a smooth installation and usage 
 2. Add the following lines to the `.env` file, replacing `YOUR_SERPAPI_API_KEY` with your actual SerpApi API key:
     ```
     SERPAPI_API_KEY=YOUR_SERPAPI_API_KEY
-    PORT=30000
+    PORT=3000
     ```
 3. Start the application:
     ```bash
