@@ -36,7 +36,7 @@ Having these prerequisites in place will ensure a smooth installation and usage 
     ```
 2. Navigate to the project directory:
     ```bash
-    cd ContactExtraction
+    cd DataScraper
     ```
 3. Install the required dependencies:
     ```bash
@@ -48,12 +48,12 @@ Having these prerequisites in place will ensure a smooth installation and usage 
 1. Create a `.env` file in the root directory of the project.
 2. Add the following lines to the `.env` file, replacing `YOUR_SERPAPI_API_KEY` with your actual SerpApi API key:
     ```
-    SERPAPI_API_KEY=YOUR_SERPAPI_API_KEY
+    SERPAPI_KEY=YOUR_SERPAPI_API_KEY
     PORT=3000
     ```
 3. Start the application:
     ```bash
-    npm start
+    npm run dev or npm start
     ```
 4. Open your web browser and go to `http://localhost:3000`.
 5. Enter the keywords and start extracting contact information.
